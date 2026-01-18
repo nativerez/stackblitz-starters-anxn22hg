@@ -148,6 +148,31 @@
             </div>
           </div>
 
+          <!-- Wizard footer controls -->
+          <div>
+            <div class="rounded-2xl bg-white shadow-lg ring-1 ring-slate-200 p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+              <div class="flex items-center gap-2 text-sm text-slate-600">
+                <span class="font-semibold" id="stepCounter"></span>
+                <span class="text-slate-400">/</span>
+                <span>4</span>
+                <span class="hidden sm:inline text-slate-400">•</span>
+                <span class="hidden sm:inline" id="stepHint"></span>
+              </div>
+
+              <div class="flex flex-wrap gap-2 justify-end">
+                <button id="prevBtn" class="px-4 py-2 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm hover:bg-slate-50 text-sm" disabled>
+                  Previous
+                </button>
+                <button id="nextBtn" class="px-4 py-2 rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 text-sm">
+                  Next
+                </button>
+                <button id="completeBtn" class="hidden px-4 py-2 rounded-xl bg-emerald-600 text-white shadow hover:bg-emerald-700 text-sm">
+                  Accept Feedback
+                </button>
+              </div>
+            </div>
+          </div>
+
           <!-- STEP 1: Grade -->
           <article class="step-panel rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 p-6" data-panel="1">
             <div class="flex items-start justify-between gap-4">
@@ -243,7 +268,7 @@
             <!-- Accordion list (better than a wide table) -->
             <div class="mt-6 space-y-3">
               <!-- Objective 1 -->
-              <details class="group rounded-2xl border border-slate-200 bg-white p-5">
+              <details class="group rounded-2xl border border-slate-200 bg-white p-5" open>
                 <summary class="cursor-pointer list-none">
                   <div class="flex items-start justify-between gap-4">
                     <div>
@@ -358,15 +383,6 @@
                 </div>
               </details>
             </div>
-
-            <div class="mt-6 rounded-2xl bg-slate-50 border border-slate-200 p-5">
-              <p class="text-sm font-semibold">Recommended next step</p>
-              <p class="mt-2 text-sm text-slate-600">Accept improvements and generate an updated plan version, or cherry-pick changes objective-by-objective.</p>
-              <div class="mt-4 flex flex-wrap gap-2">
-                <button class="px-4 py-2 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm hover:bg-slate-50 text-sm">Select changes</button>
-                <button class="px-4 py-2 rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 text-sm">Apply all suggested changes</button>
-              </div>
-            </div>
           </article>
 
           <!-- STEP 4: Improved Grade -->
@@ -413,31 +429,6 @@
             </div>
           </article>
 
-          <!-- Wizard footer controls (sticky) -->
-          <div class="lg:sticky lg:bottom-6">
-            <div class="rounded-2xl bg-white shadow-lg ring-1 ring-slate-200 p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-              <div class="flex items-center gap-2 text-sm text-slate-600">
-                <span class="font-semibold" id="stepCounter">Step 1</span>
-                <span class="text-slate-400">/</span>
-                <span>4</span>
-                <span class="hidden sm:inline text-slate-400">•</span>
-                <span class="hidden sm:inline" id="stepHint">Outcome and tier definition</span>
-              </div>
-
-              <div class="flex flex-wrap gap-2 justify-end">
-                <button id="prevBtn" class="px-4 py-2 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm hover:bg-slate-50 text-sm" disabled>
-                  Previous
-                </button>
-                <button id="nextBtn" class="px-4 py-2 rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 text-sm">
-                  Next
-                </button>
-                <button id="completeBtn" class="hidden px-4 py-2 rounded-xl bg-emerald-600 text-white shadow hover:bg-emerald-700 text-sm">
-                  Complete
-                </button>
-              </div>
-            </div>
-          </div>
-
         </section>
       </div>
     </main>
@@ -445,7 +436,7 @@
 
   <script>
     // Minimal wizard controller for the mockup.
-    (function () {
+    document.addEventListener('DOMContentLoaded', function() {
       const panels = Array.from(document.querySelectorAll('.step-panel'));
       const stepButtons = Array.from(document.querySelectorAll('[data-step]'));
       const stepper = document.getElementById('stepper');
@@ -494,7 +485,7 @@
         }
 
         // Mobile progress bars
-        const mobileBars = Array.from(document.querySelectorAll('.lg\:hidden [data-step]'));
+        const mobileBars = Array.from(document.querySelectorAll('.lg\\:hidden [data-step]'));
         mobileBars.forEach((bar) => {
           const s = Number(bar.getAttribute('data-step'));
           bar.classList.remove('bg-indigo-600', 'bg-slate-200');
@@ -503,7 +494,7 @@
 
         // Footer text
         if (stepCounter && stepMeta[step]) {
-          stepCounter.textContent = `Step ${step}`;
+          stepCounter.textContent = `Step ${step} · ${stepMeta[step].title}`;
         }
         if (stepHint && stepMeta[step]) {
           stepHint.textContent = stepMeta[step].hint;
@@ -517,15 +508,29 @@
           mobileMeta.textContent = stepMeta[step].hint;
         }
 
-        // Buttons
+        // Buttons state
         if (prevBtn) {
-          prevBtn.disabled = step === 1;
+          if (step === 1) {
+            prevBtn.disabled = true;
+            prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          } else {
+            prevBtn.disabled = false;
+            prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          }
         }
         if (nextBtn) {
-          nextBtn.classList.toggle('hidden', step === 4);
+          if (step === 4) {
+            nextBtn.classList.add('hidden');
+          } else {
+            nextBtn.classList.remove('hidden');
+          }
         }
         if (completeBtn) {
-          completeBtn.classList.toggle('hidden', step !== 4);
+          if (step === 4) {
+            completeBtn.classList.remove('hidden');
+          } else {
+            completeBtn.classList.add('hidden');
+          }
         }
       }
 
@@ -548,13 +553,21 @@
       });
 
       // Footer nav
-      prevBtn.addEventListener('click', () => showStep(Math.max(1, current - 1)));
-      nextBtn.addEventListener('click', () => showStep(Math.min(4, current + 1)));
-      completeBtn.addEventListener('click', () => alert('Complete – mock action'));
+      prevBtn.addEventListener('click', () => {
+        if (current > 1) {
+          showStep(current - 1);
+        }
+      });
+      nextBtn.addEventListener('click', () => {
+        if (current < 4) {
+          showStep(current + 1);
+        }
+      });
+      completeBtn.addEventListener('click', () => alert('Feedback accepted – mock action'));
 
       // Init
       showStep(1);
-    })();
+    });
   </script>
 </body>
 </html>
