@@ -15,31 +15,6 @@
   -->
 
   <div class="min-h-screen">
-    <!-- Top bar -->
-    <header class="bg-white/80 backdrop-blur border-b border-slate-200">
-      <div class="mx-auto max-w-7xl px-6 lg:px-10 py-4 flex items-start md:items-center justify-between gap-4">
-        <div>
-          <nav class="text-xs text-slate-500" aria-label="Breadcrumb">
-            <ol class="flex flex-wrap items-center gap-2">
-              <li><a href="#" class="hover:text-slate-700">Plans</a></li>
-              <li class="opacity-60">/</li>
-              <li><a href="#" class="hover:text-slate-700">IT – Oct 2025</a></li>
-              <li class="opacity-60">/</li>
-              <li class="text-slate-700">Request Feedback</li>
-            </ol>
-          </nav>
-          <h1 class="mt-1 text-xl md:text-2xl font-bold tracking-tight">Plan Feedback</h1>
-          <p class="mt-1 text-sm text-slate-500">A guided review of grading rationale and recommended improvements.</p>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button class="px-3 py-2 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm hover:bg-slate-50 text-sm">Save draft</button>
-          <button class="px-3 py-2 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm hover:bg-slate-50 text-sm">Download PDF</button>
-          <button class="px-3 py-2 rounded-xl bg-slate-900 text-white shadow hover:bg-slate-800 text-sm">Exit</button>
-        </div>
-      </div>
-    </header>
-
     <main class="mx-auto max-w-7xl px-6 lg:px-10 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
@@ -81,7 +56,7 @@
             </section>
 
             <!-- Stepper -->
-            <section class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 p-5">
+            <section class="hidden lg:block rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 p-5">
               <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Steps</p>
 
               <ol class="mt-4 space-y-2" id="stepper">
@@ -132,23 +107,35 @@
         <!-- Right: Step content -->
         <section class="lg:col-span-8 xl:col-span-9 space-y-6">
 
-          <!-- Mobile stepper (top) -->
-          <div class="lg:hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 p-4">
-            <div class="flex items-center justify-between">
-              <p class="text-sm font-semibold" id="mobileStepTitle">Step 1 of 4 · Grade</p>
-              <p class="text-xs text-slate-500" id="mobileStepMeta">Outcome and tier definition</p>
+          <!-- Wizard controls -->
+          <div class="rounded-2xl bg-white shadow-lg ring-1 ring-slate-200 p-4 order-first">
+            <!-- Mobile: Combined stepper and buttons -->
+            <div class="lg:hidden space-y-4">
+              <div class="flex items-center justify-between">
+                <p class="text-sm font-semibold" id="mobileStepTitle">Step 1 of 4 · Grade</p>
+                <p class="text-xs text-slate-500" id="mobileStepMeta">Outcome and tier definition</p>
+              </div>
+              <div class="grid grid-cols-4 gap-2">
+                <button class="h-2 rounded-full bg-indigo-600" data-step="1" aria-label="Step 1"></button>
+                <button class="h-2 rounded-full bg-slate-200" data-step="2" aria-label="Step 2"></button>
+                <button class="h-2 rounded-full bg-slate-200" data-step="3" aria-label="Step 3"></button>
+                <button class="h-2 rounded-full bg-slate-200" data-step="4" aria-label="Step 4"></button>
+              </div>
+              <div class="flex gap-2 justify-end">
+                <button id="prevBtn" class="px-4 py-2 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm hover:bg-slate-50 text-sm" disabled>
+                  Previous
+                </button>
+                <button id="nextBtn" class="px-4 py-2 rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 text-sm">
+                  Next
+                </button>
+                <button id="completeBtn" class="hidden px-4 py-2 rounded-xl bg-emerald-600 text-white shadow hover:bg-emerald-700 text-sm">
+                  Accept Feedback
+                </button>
+              </div>
             </div>
-            <div class="mt-3 grid grid-cols-4 gap-2">
-              <button class="h-2 rounded-full bg-indigo-600" data-step="1" aria-label="Step 1"></button>
-              <button class="h-2 rounded-full bg-slate-200" data-step="2" aria-label="Step 2"></button>
-              <button class="h-2 rounded-full bg-slate-200" data-step="3" aria-label="Step 3"></button>
-              <button class="h-2 rounded-full bg-slate-200" data-step="4" aria-label="Step 4"></button>
-            </div>
-          </div>
 
-          <!-- Wizard footer controls -->
-          <div>
-            <div class="rounded-2xl bg-white shadow-lg ring-1 ring-slate-200 p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+            <!-- Desktop: Text and buttons layout -->
+            <div class="hidden lg:flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
               <div class="flex items-center gap-2 text-sm text-slate-600">
                 <span class="font-semibold" id="stepCounter"></span>
                 <span class="text-slate-400">/</span>
@@ -158,13 +145,13 @@
               </div>
 
               <div class="flex flex-wrap gap-2 justify-end">
-                <button id="prevBtn" class="px-4 py-2 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm hover:bg-slate-50 text-sm" disabled>
+                <button id="prevBtnDesktop" class="px-4 py-2 rounded-xl bg-white ring-1 ring-slate-200 shadow-sm hover:bg-slate-50 text-sm" disabled>
                   Previous
                 </button>
-                <button id="nextBtn" class="px-4 py-2 rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 text-sm">
+                <button id="nextBtnDesktop" class="px-4 py-2 rounded-xl bg-indigo-600 text-white shadow hover:bg-indigo-700 text-sm">
                   Next
                 </button>
-                <button id="completeBtn" class="hidden px-4 py-2 rounded-xl bg-emerald-600 text-white shadow hover:bg-emerald-700 text-sm">
+                <button id="completeBtnDesktop" class="hidden px-4 py-2 rounded-xl bg-emerald-600 text-white shadow hover:bg-emerald-700 text-sm">
                   Accept Feedback
                 </button>
               </div>
@@ -442,6 +429,9 @@
       const prevBtn = document.getElementById('prevBtn');
       const nextBtn = document.getElementById('nextBtn');
       const completeBtn = document.getElementById('completeBtn');
+      const prevBtnDesktop = document.getElementById('prevBtnDesktop');
+      const nextBtnDesktop = document.getElementById('nextBtnDesktop');
+      const completeBtnDesktop = document.getElementById('completeBtnDesktop');
 
       const stepCounter = document.getElementById('stepCounter');
       const stepHint = document.getElementById('stepHint');
@@ -506,30 +496,36 @@
           mobileMeta.textContent = stepMeta[step].hint;
         }
 
-        // Buttons state
-        if (prevBtn) {
+        // Buttons state (both mobile and desktop)
+        const allPrevBtns = [prevBtn, prevBtnDesktop].filter(Boolean);
+        const allNextBtns = [nextBtn, nextBtnDesktop].filter(Boolean);
+        const allCompleteBtns = [completeBtn, completeBtnDesktop].filter(Boolean);
+
+        allPrevBtns.forEach(btn => {
           if (step === 1) {
-            prevBtn.disabled = true;
-            prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
           } else {
-            prevBtn.disabled = false;
-            prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
           }
-        }
-        if (nextBtn) {
+        });
+
+        allNextBtns.forEach(btn => {
           if (step === 4) {
-            nextBtn.classList.add('hidden');
+            btn.classList.add('hidden');
           } else {
-            nextBtn.classList.remove('hidden');
+            btn.classList.remove('hidden');
           }
-        }
-        if (completeBtn) {
+        });
+
+        allCompleteBtns.forEach(btn => {
           if (step === 4) {
-            completeBtn.classList.remove('hidden');
+            btn.classList.remove('hidden');
           } else {
-            completeBtn.classList.add('hidden');
+            btn.classList.add('hidden');
           }
-        }
+        });
       }
 
       function showStep(step) {
@@ -550,18 +546,26 @@
         });
       });
 
-      // Footer nav
-      prevBtn.addEventListener('click', () => {
+      // Footer nav - handle both mobile and desktop buttons
+      const handlePrev = () => {
         if (current > 1) {
           showStep(current - 1);
         }
-      });
-      nextBtn.addEventListener('click', () => {
+      };
+      const handleNext = () => {
         if (current < 4) {
           showStep(current + 1);
         }
-      });
-      completeBtn.addEventListener('click', () => alert('Feedback accepted – mock action'));
+      };
+      const handleComplete = () => alert('Feedback accepted – mock action');
+
+      prevBtn.addEventListener('click', handlePrev);
+      nextBtn.addEventListener('click', handleNext);
+      completeBtn.addEventListener('click', handleComplete);
+      
+      if (prevBtnDesktop) prevBtnDesktop.addEventListener('click', handlePrev);
+      if (nextBtnDesktop) nextBtnDesktop.addEventListener('click', handleNext);
+      if (completeBtnDesktop) completeBtnDesktop.addEventListener('click', handleComplete);
 
       // Init
       showStep(1);
