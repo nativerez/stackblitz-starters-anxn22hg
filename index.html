@@ -30,7 +30,7 @@
         <div class="flex items-center justify-between gap-6">
           <!-- Left: Step Title & Description -->
           <div>
-            <h2 class="text-xl font-bold" id="headerTitle">Grade</h2>
+            <h2 class="text-xl font-bold">Plan Feedback</h2>
             <p class="mt-1 text-sm text-slate-500" id="headerDescription">A single, scannable outcome with rationale and tier definition.</p>
           </div>
           
@@ -390,7 +390,6 @@
       const nextBtnDesktop = document.getElementById('nextBtnDesktop');
       const completeBtnDesktop = document.getElementById('completeBtnDesktop');
 
-      const headerTitle = document.getElementById('headerTitle');
       const headerDescription = document.getElementById('headerDescription');
 
       const stepMeta = {
@@ -426,10 +425,9 @@
           });
         }
 
-        // Update header title and description
+        // Update header description
         const currentPanel = panels.find(p => Number(p.getAttribute('data-panel')) === step);
-        if (currentPanel && headerTitle && headerDescription) {
-          headerTitle.textContent = currentPanel.getAttribute('data-title') || stepMeta[step].title;
+        if (currentPanel && headerDescription) {
           headerDescription.textContent = currentPanel.getAttribute('data-description') || stepMeta[step].hint;
         }
 
